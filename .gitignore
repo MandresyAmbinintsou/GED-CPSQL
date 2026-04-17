@@ -1,0 +1,41 @@
+# --- Base de données (Important) ---
+# On ignore les données réelles de la DB pour éviter les conflits et la lourdeur
+pgdata/
+backups/
+_db
+logfile
+
+# --- Binaires et Compilation ---
+# On ignore le programme de scan compilé et les objets
+scanner
+scanner.exe
+*.o
+*.out
+
+# --- Données utilisateur et Archives ---
+# Les documents scannés sont trop lourds pour Git
+archives/
+cache_pdf/
+*.docx
+*.pdf
+*.png
+*.jpg
+*.jpeg
+!mermaid-diagram*.png
+
+# --- Environnement et Dépendances ---
+.env
+vendor/
+node_modules/
+
+# --- IDE et Système ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.tmp
+*.bak
+*.swp
+
+# Fichiers de verrouillage Office/LibreOffice
+.~lock.*

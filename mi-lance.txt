@@ -1,0 +1,6 @@
+
+📋 Instructions Complètes pour Lancer le Système
+1. Démarrer le Serveur Web PHP
+
+cd /home/mandresyambinintsou/archive\ \(copie\)
+php -S 127.0.0.1:8000 -t .
