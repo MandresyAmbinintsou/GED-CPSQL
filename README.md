@@ -1,93 +1,153 @@
-C'est noté. Voici une version épurée de ton **README**, sans aucune puce, en utilisant des blocs de texte et une structure visuelle plus linéaire pour un aspect très propre.
-
------
-
 #  Système d'Archivage Numérique Optimisé
 
-Ce projet est une solution de gestion d'archives ultra-rapide permettant de scanner des dossiers volumineux, d'indexer les documents dans PostgreSQL et de les visualiser via une interface web avec conversion PDF dynamique.
+[![C](https://img.shields.io/badge/C-00599C?style=for-the-badge&logo=c&logoColor=white)](https://en.wikipedia.org/wiki/C_(programming_language))
+[![PHP](https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white)](https://www.php.net/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://www.javascript.com/)
+[![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)](https://www.linux.org/)
+[![Windows](https://img.shields.io/badge/Windows-0078D4?style=for-the-badge&logo=windows&logoColor=white)](https://www.microsoft.com/windows/)
 
-###  Technologies utilisées
-
-\<p align="left"\>
-\<img src="[https://raw.githubusercontent.com/devicons/devicon/master/icons/c/c-original.svg](https://www.google.com/search?q=https://raw.githubusercontent.com/devicons/devicon/master/icons/c/c-original.svg)" alt="C" width="40" height="40"/\>\&nbsp;
-\<img src="[https://raw.githubusercontent.com/devicons/devicon/master/icons/php/php-original.svg](https://www.google.com/search?q=https://raw.githubusercontent.com/devicons/devicon/master/icons/php/php-original.svg)" alt="PHP" width="40" height="40"/\>\&nbsp;
-\<img src="[https://raw.githubusercontent.com/devicons/devicon/master/icons/postgresql/postgresql-original.svg](https://www.google.com/search?q=https://raw.githubusercontent.com/devicons/devicon/master/icons/postgresql/postgresql-original.svg)" alt="PostgreSQL" width="40" height="40"/\>\&nbsp;
-\<img src="[https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg](https://www.google.com/search?q=https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg)" alt="JS" width="40" height="40"/\>\&nbsp;
-\<img src="[https://raw.githubusercontent.com/devicons/devicon/master/icons/linux/linux-original.svg](https://www.google.com/search?q=https://raw.githubusercontent.com/devicons/devicon/master/icons/linux/linux-original.svg)" alt="Linux" width="40" height="40"/\>\&nbsp;
-\<img src="[https://raw.githubusercontent.com/devicons/devicon/master/icons/windows8/windows8-original.svg](https://www.google.com/search?q=https://raw.githubusercontent.com/devicons/devicon/master/icons/windows8/windows8-original.svg)" alt="Windows" width="40" height="40"/\>
-\</p\>
-
------
+> Solution ultra-rapide de gestion d'archives : scanner des dossiers volumineux, indexer dans PostgreSQL et visualiser via interface web avec conversion PDF dynamique.
 
 ##  Fonctionnalités
 
-Le **Scanner C Multi-thread** assure une indexation massive atteignant 50,000 documents par seconde.
-L'**Explorateur Web** permet de parcourir et de choisir n'importe quel dossier du serveur à scanner.
-La **Recherche Instantanée** facilite la localisation par matricule, nom ou prénom.
-La **Conversion PDF à la volée** transforme les images PNG et JPG en PDF lors de la consultation.
+- ** Scanner C Multi-thread** : Indexation massive jusqu'à 50,000 documents/seconde
+- ** Explorateur Web** : Parcourir et choisir n'importe quel dossier du serveur
+- ** Recherche Instantanée** : Recherche par matricule, nom ou prénom
+- ** Conversion PDF à la volée** : Transformation automatique des images (PNG/JPG) en PDF
+- ** Actualisation Automatique** : F5 rafraîchit et rescanner automatiquement
+- ** Cross-platform** : Fonctionne sur Linux et Windows (avec XAMPP ou portable)
 
------
+##  Installation & Configuration
 
-##  Installation et Compilation
-
-### Prérequis
-
-Le système nécessite Linux ou Windows avec un compilateur GCC pour le moteur C.
-La base de données doit être PostgreSQL 13 ou une version supérieure.
-Le serveur web doit intégrer PHP 8.x avec les extensions pdo\_pgsql et gd activées.
+### Prérequis Système
+- **OS** : Linux ou Windows
+- **Base de données** : PostgreSQL 13+
+- **Serveur Web** : Apache/Nginx/IIS avec PHP 8.x
+- **Extensions PHP** : `pdo_pgsql`, `pgsql`, `gd`
+- **Compilateur** : GCC (Linux) ou MinGW (Windows) pour le scanner C
 
 ### Compilation du Scanner (Linux)
-
-Le moteur d'indexation se compile avec les optimisations maximales via la commande suivante :
-
 ```bash
+# Compiler le moteur d'indexation haute performance
 gcc -o scanner scanner.c -lpq -lpthread -lssl -lcrypto -O3
 ```
 
-### Configuration
-
-La connexion se définit dans le fichier `config/database.php` en ajustant le DSN, l'utilisateur et le mot de passe de la base de données.
-
------
+### Configuration Base de Données
+Modifier `config/database.php` :
+```php
+'pgsql:host=localhost;dbname=archives_db;port=5432',
+'postgres',  // utilisateur
+'postgres'   // mot de passe
+```
 
 ##  Démarrage Rapide
 
-**Sous Linux** : Exécutez la commande `php -S localhost:8000` à la racine du projet.
+### Linux (Ubuntu/Debian)
+```bash
+# Installer les dépendances
+sudo apt-get install php php-pgsql postgresql gcc libpq-dev
 
-**Sous Windows** : Utilisez le script `run_windows.bat` pour un lancement automatique de l'environnement portable.
+# Démarrer PostgreSQL et créer la DB
+sudo service postgresql start
+psql -U postgres -c "CREATE DATABASE archives_db;"
 
-**Accès par défaut** : L'URL est http://localhost:8000 avec les identifiants admin / admin123.
+# Lancer l'application
+php -S localhost:8000
+```
 
------
+### Windows avec XAMPP
+1. Télécharger XAMPP depuis [apachefriends.org](https://www.apachefriends.org/)
+2. Placer le projet dans `C:\xampp\htdocs\archive\`
+3. Installer PostgreSQL et créer la base `archives_db`
+4. Activer `pdo_pgsql` dans `php.ini`
+5. Démarrer Apache via le panneau de contrôle XAMPP
+
+### Windows Portable (RECOMMANDÉ) ⚡
+```batch
+# Double-cliquer sur run_windows.bat
+# Structure requise :
+# ├── pgsql/          # PostgreSQL portable
+# ├── php/            # PHP 8.x portable
+# ├── run_windows.bat # Script de démarrage
+# └── archive/        # Votre projet
+```
+
+## Utilisation
+
+###  Recherche de Documents
+- **Page d'accueil** (`index.php`) : Barre de recherche intelligente
+- **Suggestions automatiques** : Matricule, nom, prénom
+- **Grille des matricules** : Vue d'ensemble rapide
+- **Navigation** : Matricule → Type dossier → Documents
+
+###  Administration & Scan
+- **Page Admin** (`admin.php`) : Interface d'administration
+- **Parcourir** : Explorateur de dossiers intégré
+- **Scan automatique** : F5 lance un nouveau scan
+- **Statut temps réel** : Barre de progression et compteurs
+
+###  Actualisation Automatique
+- **F5 sur index.php** : Rafraîchit et rescanner automatiquement
+- **Persistance** : Dernier dossier scanné sauvegardé
+- **Synchronisation** : Scan immédiat sans attendre
 
 ##  Structure du Projet
 
-**scanner.c** contient le code source du moteur d'indexation haute performance.
-**admin.php** gère l'interface d'administration et l'explorateur de dossiers.
-**index.php** constitue l'interface de recherche pour les utilisateurs.
-**pdf.php** s'occupe de la génération dynamique des fichiers PDF.
-**api/** regroupe les points d'accès JSON pour les fonctionnalités web.
-
------
+```
+📦 archive/
+├── 📄 scanner.c           # Moteur d'indexation C haute performance
+├── 📄 admin.php           # Interface administration & explorateur
+├── 📄 index.php           # Interface recherche utilisateur
+├── 📄 pdf.php             # Générateur PDF dynamique
+├── 📄 login.php           # Authentification
+├── 📄 logout.php          # Déconnexion
+├── 📁 api/                # API REST JSON
+│   ├── 📄 scan-folder.php
+│   ├── 📄 list-directories.php
+│   └── 📄 ...
+├── 📁 config/             # Configuration
+│   └── 📄 database.php
+├── 📁 templates/          # Templates HTML
+├── 📁 archives/           # Données d'exemple
+├── 📁 cache_pdf/          # Cache des PDF générés
+└── 📄 run_windows.bat     # Script démarrage Windows
+```
 
 ##  Sécurité
 
-Le système valide systématiquement les chemins pour interdire l'accès aux dossiers sensibles.
-Toutes les interactions avec la base de données utilisent des requêtes préparées via PDO.
-La gestion d'erreurs est centralisée pour éviter l'exposition de données de débogage.
+- ✅ **Validation des chemins** : Accès contrôlé aux dossiers
+- ✅ **Requêtes préparées** : Protection contre les injections SQL
+- ✅ **Gestion d'erreurs** : Pas d'exposition de données sensibles
+- ✅ **Authentification** : Système de login/logout
+- ✅ **Cache intelligent** : Pas de stockage des données sensibles
 
------
+## 🎯 Performance
 
-##  Auteur
+- **Scanner C** : 50,000 docs/sec en multithread
+- **Indexation optimisée** : Tables partitionnées PostgreSQL
+- **Cache PDF** : Génération à la première consultation
+- **Recherche instantanée** : Index full-text sur tous les champs
+- **Fallback PHP** : Scanner alternatif si binaire C indisponible
 
-**Mandresy Ambinintsou**
-Développeur spécialisé en systèmes et performance logicielle.
+##  Support & Contact
 
-\<p align="left"\>
-\<a href="[https://github.com/MandresyAmbinintsou/](https://github.com/MandresyAmbinintsou/)" target="\_blank"\>
-\<img src="[https://img.shields.io/badge/GitHub-100000?style=for-the-badge\&logo=github\&logoColor=white](https://www.google.com/search?q=https://img.shields.io/badge/GitHub-100000%3Fstyle%3Dfor-the-badge%26logo%3Dgithub%26logoColor%3Dwhite)" alt="Github Profile" /\>
-\</a\>
-\</p\>
+**Développeur** : Mandresy Ambinintsou
 
-> [\!IMPORTANT]  
->  Pour toute utilisation ou contribution, merci de m'ajouté aux contributeurs du dépôt.
+[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/MandresyAmbinintsou)
+
+---
+
+##  Notes Importantes
+
+- **Première exécution** : Le scanner crée automatiquement les tables nécessaires
+- **Permissions** : Assurer les droits d'écriture sur `cache_pdf/` et `backups/`
+- **Extensions PHP** : Vérifier que `pdo_pgsql` est activé
+- **PostgreSQL** : Version 13+ recommandée pour les meilleures performances
+
+> [!TIP]
+> Pour les environnements de production, utiliser un serveur web dédié (Apache/Nginx) plutôt que le serveur intégré PHP.
+
+---
+
+*Dernière mise à jour : Avril 2026*
