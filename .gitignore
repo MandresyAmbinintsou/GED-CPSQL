@@ -9,6 +9,7 @@ logfile
 # On ignore le programme de scan compilé et les objets
 scanner
 scanner.exe
+mi-lance.txt
 *.o
 *.out
 
