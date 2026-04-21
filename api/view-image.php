@@ -13,13 +13,30 @@ try {
     $stmt = $db->prepare("SELECT chemin_png FROM documents WHERE id = ?");
     $stmt->execute([$id]);
     $doc = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if (!$doc || !file_exists($doc['chemin_png'])) {
+    if (!$doc) {
         http_response_code(404);
         die("Image introuvable");
     }
 
-    $extension = strtolower(pathinfo($doc['chemin_png'], PATHINFO_EXTENSION));
+    $imagePath = $doc['chemin_png'];
+    if (!file_exists($imagePath)) {
+        $stmt_base = $db->query('SELECT chemin FROM scan_history ORDER BY dernier_scan DESC LIMIT 1');
+        $basePath = $stmt_base->fetchColumn();
+        if ($basePath) {
+            $basePath = rtrim(str_replace('\\', '/', $basePath), '/');
+            $candidate = $basePath . '/' . ltrim(str_replace('\\', '/', $imagePath), '/');
+            if (file_exists($candidate)) {
+                $imagePath = $candidate;
+            }
+        }
+    }
+
+    if (!file_exists($imagePath)) {
+        http_response_code(404);
+        die("Image introuvable");
+    }
+
+    $extension = strtolower(pathinfo($imagePath, PATHINFO_EXTENSION));
     $mime_types = [
         'png'  => 'image/png',
         'jpg'  => 'image/jpeg',
@@ -31,8 +48,8 @@ try {
     $content_type = $mime_types[$extension] ?? 'application/octet-stream';
     
     header("Content-Type: $content_type");
-    header("Content-Length: " . filesize($doc['chemin_png']));
-    readfile($doc['chemin_png']);
+    header("Content-Length: " . filesize($imagePath));
+    readfile($imagePath);
 } catch (Exception $e) {
     http_response_code(500);
     die("Erreur serveur");

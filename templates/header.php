@@ -62,26 +62,39 @@
         
         /* Styles des boutons */
         .btn {
-            padding: 8px 15px;
+            padding: 10px 18px;
             border: none;
-            border-radius: 5px;
+            border-radius: 999px;
             cursor: pointer;
             font-size: 14px;
-            font-weight: 500;
+            font-weight: 600;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
-            gap: 5px;
-            transition: all 0.2s;
-            margin-left: 15px;
+            gap: 8px;
+            transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+            margin-left: 12px;
             font-family: inherit;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.08);
         }
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+        }
+        .btn-primary { background: #3498db; color: white; }
+        .btn-primary:hover { background: #2980b9; }
         .btn-success { background: #2ecc71; color: white; }
-        .btn-success:hover { background: #27ae60; transform: translateY(-1px); }
+        .btn-success:hover { background: #27ae60; }
         .btn-danger { background: #e74c3c; color: white; }
-        .btn-danger:hover { background: #c0392b; transform: translateY(-1px); }
+        .btn-danger:hover { background: #c0392b; }
         .btn-outline { background: transparent; border: 1px solid #bdc3c7; color: #bdc3c7; }
         .btn-outline:hover { border-color: white; color: white; }
+        .user-badge {
+            margin-left: 15px;
+            color: #bdc3c7;
+            font-size: 14px;
+            font-weight: 500;
+        }
     </style>
 </head>
 <body>
@@ -90,13 +103,16 @@
             <a href="index.php" class="nav-logo"> GED-MEF</a>
             <div class="nav-links">
                 <a href="index.php" class="<?php echo $currentPage === 'index' ? 'active' : ''; ?>">Accueil</a>
-                <a href="admin.php" class="<?php echo $currentPage === 'admin' ? 'active' : ''; ?>">Administration</a>
-                
-                <button onclick="manualBackup()" class="btn btn-success" title="Sauvegarder la base de données">
-                    <span></span> Sauvegarde
-                </button>
+                <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+                    <a href="admin.php" class="<?php echo $currentPage === 'admin' ? 'active' : ''; ?>">Administration</a>
+                    <a href="gestion_compte.php" class="<?php echo $currentPage === 'gestion_compte' ? 'active' : ''; ?>">Gestion des comptes</a>
+                <?php endif; ?>
 
-                <?php if (isset($_SESSION['logged_in'])): ?>
+                <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+                    <button onclick="manualBackup()" class="btn btn-success" title="Sauvegarder la base de données">Sauvegarde</button>
+                <?php endif; ?>
+
+                <?php if (isset($_SESSION['username'])): ?>
                     <button onclick="confirmLogout()" class="btn btn-danger">Déconnexion</button>
                 <?php endif; ?>
             </div>

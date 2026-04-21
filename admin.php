@@ -1,7 +1,7 @@
 <?php
 // admin.php - Interface d'administration
 require_once 'auth.php';
-check_auth();
+check_admin();
 require_once 'config/database.php';
 
 $db = Database::getInstance();
@@ -47,9 +47,10 @@ include 'templates/header.php';
             margin-top: 20px;
         }
         .stat-card {
-            background: #f8f9fa;
+           background: white;
             padding: 20px;
             border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             text-align: center;
         }
         .stat-value {
@@ -222,7 +223,7 @@ include 'templates/header.php';
                     </div>
                     <div class="help-text">Entrez un chemin absolu ou utilisez le bouton Parcourir.</div>
                 </div>
-                <button type="submit" class="btn btn-primary">Lancer le scan</button>
+                <button type="submit" class="btn btn-success">Lancer le scan</button>
             </form>
             
             <!-- Explorateur de fichiers (caché par défaut) -->

@@ -12,7 +12,7 @@ scanner.exe
 mi-lance.txt
 *.o
 *.out
-
+*.exe
 # --- Données utilisateur et Archives ---
 # Les documents scannés sont trop lourds pour Git
 archives/
@@ -37,6 +37,12 @@ Thumbs.db
 *.tmp
 *.bak
 *.swp
+
+# Code::Blocks
+*.cbp
+*.workspace
+*.layout
+*.depend
 
 # Fichiers de verrouillage Office/LibreOffice
 .~lock.*

@@ -25,6 +25,18 @@ try {
     $nom_fichier = $doc['nom_fichier'];
 
     if (!file_exists($chemin_png)) {
+        $stmt_base = $db->query('SELECT chemin FROM scan_history ORDER BY dernier_scan DESC LIMIT 1');
+        $basePath = $stmt_base->fetchColumn();
+        if ($basePath) {
+            $basePath = rtrim(str_replace('\\', '/', $basePath), '/');
+            $candidate = $basePath . '/' . ltrim(str_replace('\\', '/', $chemin_png), '/');
+            if (file_exists($candidate)) {
+                $chemin_png = $candidate;
+            }
+        }
+    }
+
+    if (!file_exists($chemin_png)) {
         http_response_code(404);
         die("Fichier source image introuvable sur le disque : " . htmlspecialchars($chemin_png));
     }

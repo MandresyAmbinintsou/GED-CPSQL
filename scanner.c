@@ -304,7 +304,8 @@ int main(int argc, char *argv[]) {
     printf("Threads: %d\n", MAX_THREADS);
     printf("Batch size: %d\n", BATCH_SIZE);
     
-    PGconn *conn = PQconnectdb("host=localhost dbname=archives_db user=postgres password=postgres");
+    const char *conn_info = getenv("DB_CONN") ? getenv("DB_CONN") : "host=localhost dbname=archives_db user=postgres password=postgres";
+    PGconn *conn = PQconnectdb(conn_info);
     if (PQstatus(conn) != CONNECTION_OK) {
         fprintf(stderr, "Erreur connexion DB: %s\n", PQerrorMessage(conn));
         PQfinish(conn);
@@ -382,7 +383,7 @@ int main(int argc, char *argv[]) {
     for (int i = 0; i < MAX_THREADS; i++) {
         thread_data[i].thread_id = i;
         strcpy(thread_data[i].chemin_base, dossier_base);
-        thread_data[i].conn = PQconnectdb("host=localhost dbname=archives_db user=postgres password=postgres");
+        thread_data[i].conn = PQconnectdb(conn_info);
         thread_data[i].documents_trouves = 0;
         pthread_create(&threads[i], NULL, scan_worker, &thread_data[i]);
     }

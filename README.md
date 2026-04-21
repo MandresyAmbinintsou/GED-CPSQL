@@ -73,6 +73,10 @@ php -S localhost:8000
 # └── archive/        # Votre projet
 ```
 
+> Lors de la première connexion, accéder à `setup.php` pour créer le premier compte administrateur.
+> Les utilisateurs peuvent créer leur compte via `formulaire.php` depuis la page de connexion.
+> Comptes par défaut : `admin/admin123` (admin) et `user/user123` (utilisateur).
+
 ## Utilisation
 
 ###  Recherche de Documents
@@ -87,6 +91,12 @@ php -S localhost:8000
 - **Scan automatique** : F5 lance un nouveau scan
 - **Statut temps réel** : Barre de progression et compteurs
 
+###  Gestion des Comptes
+- **Configuration initiale** (`setup.php`) : Création du premier compte admin
+- **Création de compte** (`formulaire.php`) : Formulaire d'inscription utilisateur
+- **Gestion comptes** (`gestion_compte.php`) : Administration des utilisateurs (admin uniquement)
+- **Authentification** (`login.php`) : Connexion avec rôles (admin/user)
+
 ###  Actualisation Automatique
 - **F5 sur index.php** : Rafraîchit et rescanner automatiquement
 - **Persistance** : Dernier dossier scanné sauvegardé
@@ -99,6 +109,9 @@ php -S localhost:8000
 ├── 📄 scanner.c           # Moteur d'indexation C haute performance
 ├── 📄 admin.php           # Interface administration & explorateur
 ├── 📄 index.php           # Interface recherche utilisateur
+├── 📄 setup.php           # Configuration initiale des comptes
+├── 📄 gestion_compte.php  # Gestion des comptes utilisateurs (admin)
+├── 📄 formulaire.php      # Formulaire de création de compte
 ├── 📄 pdf.php             # Générateur PDF dynamique
 ├── 📄 login.php           # Authentification
 ├── 📄 logout.php          # Déconnexion
@@ -116,13 +129,13 @@ php -S localhost:8000
 
 ##  Sécurité
 
-- ✅ **Validation des chemins** : Accès contrôlé aux dossiers
-- ✅ **Requêtes préparées** : Protection contre les injections SQL
-- ✅ **Gestion d'erreurs** : Pas d'exposition de données sensibles
-- ✅ **Authentification** : Système de login/logout
-- ✅ **Cache intelligent** : Pas de stockage des données sensibles
+-  **Validation des chemins** : Accès contrôlé aux dossiers
+-  **Requêtes préparées** : Protection contre les injections SQL
+-  **Gestion d'erreurs** : Pas d'exposition de données sensibles
+-  **Authentification** : Système de login/logout
+-  **Cache intelligent** : Pas de stockage des données sensibles
 
-## 🎯 Performance
+##  Performance
 
 - **Scanner C** : 50,000 docs/sec en multithread
 - **Indexation optimisée** : Tables partitionnées PostgreSQL
@@ -150,4 +163,3 @@ php -S localhost:8000
 
 ---
 
-*Dernière mise à jour : Avril 2026*

@@ -42,11 +42,8 @@ try {
                     $count = count($path_parts);
                     $type_dossier = ($count >= 2) ? $path_parts[$count - 2] : 'Autres';
                     
-                    // Le chemin relatif pour l'affichage (depuis la base des archives)
-                    $relative_path = $matricule . '/' . $type_dossier . '/' . $file->getBasename();
-                    
                     $fichiers_reels[] = [
-                        'chemin' => $relative_path,
+                        'chemin' => $full_path,
                         'nom' => $file->getBasename(),
                         'taille' => $file->getSize(),
                         'type' => $type_dossier
