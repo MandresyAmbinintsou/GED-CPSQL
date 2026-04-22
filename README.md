@@ -22,18 +22,62 @@
 
 ### Prérequis Système
 - **OS** : Linux ou Windows
-- **Base de données** : PostgreSQL 13+
+- **Base de données** : PostgreSQL 13+ ou MySQL 5.7+ (XAMPP)
 - **Serveur Web** : Apache/Nginx/IIS avec PHP 8.x
-- **Extensions PHP** : `pdo_pgsql`, `pgsql`, `gd`
+- **Extensions PHP** : `pdo_pgsql`/`pdo_mysql`, `gd`
 - **Compilateur** : GCC (Linux) ou MinGW (Windows) pour le scanner C
 
-### Compilation du Scanner (Linux)
+### Installation sur Windows avec XAMPP
+
+#### 1. Télécharger et installer XAMPP
+- Téléchargez XAMPP depuis [apachefriends.org](https://www.apachefriends.org/)
+- Installez dans `C:\xampp\`
+- Lancez le Control Panel et démarrez Apache + MySQL
+
+#### 2. Configuration de la base de données
+- Ouvrez phpMyAdmin : `http://localhost/phpmyadmin/`
+- Créez une base de données : `archives_db`
+- Utilisateur par défaut : `root` (mot de passe vide)
+
+#### 3. Configuration de l'application
+- Placez les fichiers du projet dans `C:\xampp\htdocs\archives\`
+- Modifiez `config/database.php` si nécessaire (auto-détection activée)
+- Variables d'environnement optionnelles :
+  ```env
+  DB_TYPE=mysql
+  DB_HOST=localhost
+  DB_PORT=3306
+  DB_NAME=archives_db
+  DB_USER=root
+  DB_PASS=
+  ```
+
+#### 4. Initialisation automatique
+```bash
+# Depuis le répertoire du projet
+php init-database.php
+```
+
+Ou utilisez le script automatique :
+```cmd
+install_xampp.bat
+```
+
+#### 5. Compilation du scanner (optionnel)
+```cmd
+# Avec MinGW installé
+gcc -o scanner.exe scanner.c -lpq -lpthread -lssl -lcrypto -O3
+```
+
+### Installation sur Linux
+
+#### Compilation du Scanner
 ```bash
 # Compiler le moteur d'indexation haute performance
 gcc -o scanner scanner.c -lpq -lpthread -lssl -lcrypto -O3
 ```
 
-### Configuration Base de Données
+#### Configuration Base de Données PostgreSQL
 Modifier `config/database.php` :
 ```php
 'pgsql:host=localhost;dbname=archives_db;port=5432',
@@ -42,6 +86,18 @@ Modifier `config/database.php` :
 ```
 
 ##  Démarrage Rapide
+
+### Windows (XAMPP)
+```cmd
+# Placer les fichiers dans C:\xampp\htdocs\archives\
+# Exécuter le script d'installation
+install_xampp.bat
+
+# Ou manuellement :
+# 1. Créer la BD 'archives_db' dans phpMyAdmin
+# 2. php init-database.php
+# 3. Accéder à http://localhost/archives/
+```
 
 ### Linux (Ubuntu/Debian)
 ```bash

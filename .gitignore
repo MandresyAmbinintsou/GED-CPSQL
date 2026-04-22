@@ -43,6 +43,6 @@ Thumbs.db
 *.workspace
 *.layout
 *.depend
-
+*.codeblocks-20.03-32bit-setup.exe
 # Fichiers de verrouillage Office/LibreOffice
 .~lock.*

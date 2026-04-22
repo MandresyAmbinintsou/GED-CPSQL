@@ -213,6 +213,41 @@ include 'templates/header.php';
         </div>
 
         <div class="card">
+            <div class="card-title">Gestion des employés</div>
+            <div style="margin-bottom: 20px;">
+                <button type="button" id="add-employee-btn" class="btn btn-primary">Ajouter un employé</button>
+            </div>
+            
+            <!-- Formulaire d'ajout d'employé (caché par défaut) -->
+            <div id="add-employee-form" style="display: none; margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 5px;">
+                <h4 style="margin-bottom: 15px; color: #2c3e50;">Ajouter un employé</h4>
+                <form id="employee-form">
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label for="matricule">Matricule:</label>
+                        <input type="text" id="matricule" name="matricule" required style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label for="nom">Nom:</label>
+                        <input type="text" id="nom" name="nom" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label for="prenom">Prénom:</label>
+                        <input type="text" id="prenom" name="prenom" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button type="submit" class="btn btn-success">Ajouter</button>
+                        <button type="button" id="cancel-add-employee" class="btn">Annuler</button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Liste des employés -->
+            <div id="employees-list">
+                <div style="text-align: center; color: #7f8c8d;">Chargement...</div>
+            </div>
+        </div>
+
+        <div class="card">
             <div class="card-title">Scanner un dossier</div>
             <form id="scan-form">
                 <div class="form-group">
@@ -472,6 +507,120 @@ include 'templates/header.php';
                 }
             }
         });
+
+        // Gestion des employés
+        const addEmployeeBtn = document.getElementById('add-employee-btn');
+        const addEmployeeForm = document.getElementById('add-employee-form');
+        const employeeForm = document.getElementById('employee-form');
+        const cancelAddEmployee = document.getElementById('cancel-add-employee');
+        const employeesList = document.getElementById('employees-list');
+
+        if (addEmployeeBtn) {
+            addEmployeeBtn.addEventListener('click', () => {
+                addEmployeeForm.style.display = 'block';
+                addEmployeeBtn.style.display = 'none';
+            });
+        }
+
+        if (cancelAddEmployee) {
+            cancelAddEmployee.addEventListener('click', () => {
+                addEmployeeForm.style.display = 'none';
+                addEmployeeBtn.style.display = 'block';
+                employeeForm.reset();
+            });
+        }
+
+        if (employeeForm) {
+            employeeForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const formData = new FormData(employeeForm);
+                
+                try {
+                    const response = await fetch('api/manage-employees.php', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        addEmployeeForm.style.display = 'none';
+                        addEmployeeBtn.style.display = 'block';
+                        employeeForm.reset();
+                        loadEmployees();
+                    } else {
+                        alert('Erreur: ' + (data.error || 'Erreur inconnue'));
+                    }
+                } catch (error) {
+                    alert('Erreur réseau: ' + error.message);
+                }
+            });
+        }
+
+        async function loadEmployees() {
+            try {
+                const response = await fetch('api/manage-employees.php');
+                const employees = await response.json();
+                
+                if (employees.error) {
+                    employeesList.innerHTML = '<div style="color: red;">Erreur: ' + employees.error + '</div>';
+                    return;
+                }
+                
+                if (employees.length === 0) {
+                    employeesList.innerHTML = '<div style="color: #7f8c8d;">Aucun employé enregistré.</div>';
+                    return;
+                }
+                
+                let html = '<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px;">';
+                employees.forEach(employee => {
+                    html += `
+                        <div style="background: white; border: 1px solid #ddd; border-radius: 5px; padding: 15px;">
+                            <div style="font-weight: bold; color: #2c3e50; margin-bottom: 5px;">${employee.matricule}</div>
+                            <div style="color: #7f8c8d; margin-bottom: 10px;">
+                                ${employee.nom || ''} ${employee.prenom || ''} ${(!employee.nom && !employee.prenom) ? '(Nom inconnu)' : ''}
+                            </div>
+                            <div style="display: flex; gap: 5px;">
+                                <button type="button" class="btn btn-sm btn-primary" onclick="editEmployee('${employee.matricule}')">Modifier</button>
+                                <button type="button" class="btn btn-sm btn-danger" onclick="deleteEmployee('${employee.matricule}')">Supprimer</button>
+                            </div>
+                        </div>
+                    `;
+                });
+                html += '</div>';
+                employeesList.innerHTML = html;
+            } catch (error) {
+                employeesList.innerHTML = '<div style="color: red;">Erreur de chargement: ' + error.message + '</div>';
+            }
+        }
+
+        function editEmployee(matricule) {
+            // TODO: Implement edit functionality
+            alert('Fonctionnalité de modification à implémenter');
+        }
+
+        async function deleteEmployee(matricule) {
+            if (!confirm(`Supprimer l'employé ${matricule} ?`)) return;
+            
+            try {
+                const response = await fetch('api/manage-employees.php', {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ matricule })
+                });
+                const data = await response.json();
+                
+                if (data.success) {
+                    loadEmployees();
+                } else {
+                    alert('Erreur: ' + (data.error || 'Erreur inconnue'));
+                }
+            } catch (error) {
+                alert('Erreur réseau: ' + error.message);
+            }
+        }
+
+        // Charger les employés au démarrage
+        document.addEventListener('DOMContentLoaded', loadEmployees);
 
         function escapeHtml(text) {
             const map = {
