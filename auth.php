@@ -3,7 +3,7 @@
 session_start();
 require_once __DIR__ . '/config/database.php';
 
-function ensureUsersTable(PDO $db = null): void {
+function ensureUsersTable($db = null): void {
     if ($db === null) {
         $db = Database::getInstance();
     }
@@ -25,7 +25,7 @@ function ensureUsersTable(PDO $db = null): void {
     }
 }
 
-function seedDefaultUsers(PDO $db = null): void {
+function seedDefaultUsers($db = null): void {
     if ($db === null) {
         $db = Database::getInstance();
     }
